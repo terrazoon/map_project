@@ -86,10 +86,12 @@
       }
     </style>
   </head>
+  
+  
   <body>
     <div class="container">
       <div class="options-box">
-        <h1>Find Your New NYC Home</h1>
+        <h1>Visit Santa Clarita</h1>
         <div>
           <input id="show-listings" type="button" value="Show Listings">
           <input id="hide-listings" type="button" value="Hide Listings">
@@ -105,26 +107,19 @@
         <hr>
         <div>
           <span class="text"> Within </span>
-          <select id="max-duration">
-            <option value="10">10 min</option>
-            <option value="15">15 min</option>
-            <option value="30">30 min</option>
-            <option value="60">1 hour</option>
-          </select>
-          <select id="mode">
-            <option value="DRIVING">drive</option>
-            <option value="WALKING">walk</option>
-            <option value="BICYCLING">bike</option>
-            <option value="TRANSIT">transit ride</option>
-          </select>
+          <select id="max-duration" data-bind="options: durationList "></select> 
+          <span class="text"> minutes </span>
+          <select id="mode" data-bind="options: modeList "></select> 
+          
+          
           <span class="text">of</span>
-          <input id="search-within-time-text" type="text" placeholder="Ex: Google Office NYC or 75 9th Ave, New York, NY">
+          <input id="search-within-time-text" type="text" placeholder="Ex: Valley Lyons Pet Hospital">
           <input id="search-within-time" type="button" value="Go">
         </div>
         <hr>
         <div>
           <span class="text">Search for nearby places</span>
-          <input id="places-search" type="text" placeholder="Ex: Pizza delivery in NYC">
+          <input id="places-search" type="text" placeholder="Ex: Pizza delivery in Santa Clarita">
           <input id="go-places" type="button" value="Go">
         </div>
       </div>
@@ -214,7 +209,7 @@
 
         // Constructor creates a new map - only center and zoom are required.
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 40.7413549, lng: -73.9980244},
+          center: {lat: 34.3857, lng: -118.5642},
           zoom: 13,
           styles: styles,
           mapTypeControl: false
@@ -233,17 +228,8 @@
             document.getElementById('places-search'));
         // Bias the searchbox to within the bounds of the map.
         searchBox.setBounds(map.getBounds());
-
-        // These are the real estate listings that will be shown to the user.
-        // Normally we'd have these in a database instead.
-        var locations = [
-          {title: 'Park Ave Penthouse', location: {lat: 40.7713024, lng: -73.9632393}},
-          {title: 'Chelsea Loft', location: {lat: 40.7444883, lng: -73.9949465}},
-          {title: 'Union Square Open Floor Plan', location: {lat: 40.7347062, lng: -73.9895759}},
-          {title: 'East Village Hip Studio', location: {lat: 40.7281777, lng: -73.984377}},
-          {title: 'TriBeCa Artsy Bachelor Pad', location: {lat: 40.7195264, lng: -74.0089934}},
-          {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
-        ];
+        
+        
 
         var largeInfowindow = new google.maps.InfoWindow();
 
@@ -283,6 +269,11 @@
           markers.push(marker);
           // Create an onclick event to open the large infowindow at each marker.
           marker.addListener('click', function() {
+            if (this.getAnimation() !== null) {
+              this.setAnimation(null);
+            } else {
+              this.setAnimation(google.maps.Animation.BOUNCE);
+            }
             populateInfoWindow(this, largeInfowindow);
           });
           // Two event listeners - one for mouseover, one for mouseout,
@@ -465,7 +456,7 @@
           // on it and zoom in
           geocoder.geocode(
             { address: address,
-              componentRestrictions: {locality: 'New York'}
+              componentRestrictions: {locality: 'Santa Clarita'}
             }, function(results, status) {
               if (status == google.maps.GeocoderStatus.OK) {
                 map.setCenter(results[0].geometry.location);
