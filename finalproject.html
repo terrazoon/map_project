@@ -1,98 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      html,
-      body {
-        font-family: Arial, sans-serif;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-
-      .container {
-        height: 100%;
-        position: relative;
-      }
-
-      input {
-        font-size: 12px;
-      }
-
-      h1 {
-        color: #525454;
-        font-size: 22px;
-        margin: 0 0 10px 0;
-        text-align: center;
-      }
-
-      #hide-listings,
-      #show-listings {
-        width: 48%;
-      }
-
-      hr {
-        background: #D0D7D9;
-        height: 1px;
-        margin: 20px 0 20px 0;
-        border: none;
-      }
-
-      #map {
-        bottom:0px;
-        height: 100%;
-        left: 362px;
-        position: absolute;
-        right: 0px;
-      }
-
-      .options-box {
-        background: #fff;
-        border: 1px solid #999;
-        border-radius: 3px;
-        height: 100%;
-        line-height: 35px;
-        padding: 10px 10px 30px 10px;
-        text-align: left;
-        width: 340px;
-      }
-
-      #pano {
-        width: 200px;
-        height: 200px;
-      }
-
-      #places-search,
-      #search-within-time-text {
-        width: 84%;
-      }
-
-      .text {
-        font-size: 12px;
-      }
-
-      #toggle-drawing {
-        width: 27%;
-        position: relative;
-        margin-left: 10px;
-      }
-
-      #zoom-to-area-text {
-        width: 70%;
-      }
-
-      #zoom-to-area {
-        width: 24%;
-      }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
   </head>
   
   
   <body>
     <div class="container">
+      <div class="row">
+      <div class="col-sm-12">
       <div class="options-box">
         <h1>Visit Santa Clarita</h1>
         <div>
+          <select id="location" data-bind="options: availableLocations, optionsText: 'title', value: selectedLocation "></select>
+          
           <input id="show-listings" type="button" value="Show Listings">
           <input id="hide-listings" type="button" value="Hide Listings">
           <hr>
@@ -122,9 +43,15 @@
           <input id="places-search" type="text" placeholder="Ex: Pizza delivery in Santa Clarita">
           <input id="go-places" type="button" value="Go">
         </div>
+      </div> <!--end optionsbox-->
+      </div> <!--end col-->
       </div>
+      <div class="row">
+      <div class="col-sm-12 col-md-6">
       <div id="map"></div>
-    </div>
+      </div>
+      </div> <!-- end row -->
+    </div> <!-- end container-->
     <script>
       var map;
 
@@ -137,7 +64,7 @@
       // Create placemarkers array to use in multiple functions to have control
       // over the number of places that show.
       var placeMarkers = [];
-
+      
       function initMap() {
         // Create a styles array to use with the map.
         var styles = [
@@ -210,7 +137,7 @@
         // Constructor creates a new map - only center and zoom are required.
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 34.3857, lng: -118.5642},
-          zoom: 13,
+          zoom: 12,
           styles: styles,
           mapTypeControl: false
         });
@@ -384,21 +311,33 @@
 
       // This function will loop through the markers array and display them all.
       function showListings() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        var e = document.getElementById("location");
+        var strUser = e.options[e.selectedIndex].value;
+        var title = locations[e.selectedIndex].title;
+        
+        
         var bounds = new google.maps.LatLngBounds();
         // Extend the boundaries of the map for each marker and display the marker
         for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(map);
-          bounds.extend(markers[i].position);
+          if (title == markers[i].title) {
+            markers[i].setMap(map);
+            bounds.extend(markers[i].position);
+          }
         }
         map.fitBounds(bounds);
       }
-
-      // This function will loop through the listings and hide them all.
+      
       function hideMarkers(markers) {
         for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(null);
+            markers[i].setMap(null);
         }
+       
       }
+
+      
 
       // This function takes in a COLOR, and then creates a new marker
       // icon of that color. The icon will be 21 px wide by 34 high, have an origin
@@ -460,7 +399,7 @@
             }, function(results, status) {
               if (status == google.maps.GeocoderStatus.OK) {
                 map.setCenter(results[0].geometry.location);
-                map.setZoom(15);
+                map.setZoom(8);
               } else {
                 window.alert('We could not find that location - try entering a more' +
                     ' specific place.');
@@ -717,5 +656,7 @@
     
     <script src="js/lib/knockout-3.4.2.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/lib/jquery-3.2.1.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
   </body>
 </html>

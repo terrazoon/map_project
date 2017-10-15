@@ -38,18 +38,33 @@
         
 //}
 
-
+//TODO remove
 var locations = [
-          {title: 'Vista Valencia Golf Course', location: {lat: 34.3857, lng: -118.5642}},
-          {title: 'California Institute of the Arts', location: {lat: 34.3933, lng: -118.5668}},
-          {title: 'Six Flags Magic Mountain', location: {lat: 34.4253, lng: -118.5972}},
-          {title: 'The Masters University', location: {lat: 34.3825, lng: -118.5193}},
-          {title: 'Towsley Canyon Park', location: {lat: 34.3606, lng: -118.5548}}
+    {title: 'Vista Valencia Golf Course', location: {lat: 34.3857, lng: -118.5642}},
+    {title: 'California Institute of the Arts', location: {lat: 34.3933, lng: -118.5668}},
+    {title: 'Six Flags Magic Mountain', location: {lat: 34.4253, lng: -118.5972}},
+    {title: 'The Masters University', location: {lat: 34.3825, lng: -118.5193}},
+    {title: 'Towsley Canyon Park', location: {lat: 34.3606, lng: -118.5548}}
+];
+
         
-        ];
+var Location = function(title, location) {
+        this.title = title;
+        this.location = location;
+};
 
 var ViewModel = function() {
     var self = this;
+    
+    this.availableLocations = ko.observableArray([
+    
+          new Location('Vista Valencia Golf Course', {lat: 34.3857, lng: -118.5642}),
+          new Location('California Institute of the Arts', {lat: 34.3933, lng: -118.5668}),
+          new Location('Six Flags Magic Mountain', {lat: 34.4253, lng: -118.5972}),
+          new Location('The Masters University', {lat: 34.3825, lng: -118.5193}),
+          new Location('Towsley Canyon Park', {lat: 34.3606, lng: -118.5548})
+          
+    ]), selectedLocation = ko.observable();
     
     this.durationList = ko.observableArray(["10", "15", "30", "60"]);
     this.modeList = ko.observableArray(["DRIVING", "WALKING", "BICYCLING", "TRANSIT"]);   
@@ -70,7 +85,8 @@ var ViewModel = function() {
     //this.setCat = function(clickedCat) {
     //    self.currentCat(clickedCat);
     //}
-       
+    
+   
     
 }
 
