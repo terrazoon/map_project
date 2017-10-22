@@ -53,8 +53,31 @@ var Location = function(title, location) {
         this.location = location;
 };
 
+let API_KEY = '7eb2739c11560e56f77b4edae27e19b2';
+
+function getWeather(latitude, longtitude) {
+  $.ajax({
+    url: 'http://api.openweathermap.org/data/2.5/weather',
+    data: {
+      lat: latitude,
+      lon: longtitude,
+      units: 'imperial',
+      APPID: API_KEY
+    },
+    success: data => {
+       console.log(data["main"]["temp"] + " F");
+       $('.weather_field').html(data["main"]["temp"] + " F");
+          
+    }
+  })
+}
+
+getWeather(34.3606,-118.5548);
+
 var ViewModel = function() {
     var self = this;
+    
+    
     
     this.availableLocations = ko.observableArray([
     
@@ -69,6 +92,9 @@ var ViewModel = function() {
     this.durationList = ko.observableArray(["10", "15", "30", "60"]);
     this.modeList = ko.observableArray(["DRIVING", "WALKING", "BICYCLING", "TRANSIT"]);   
     
+    
+    //this.weather = ko.observable(new Weather().summary);
+    
     //this.catList = ko.observableArray([]);
 
     //initialCats.forEach(function(catItem){
@@ -76,6 +102,14 @@ var ViewModel = function() {
     //});
     
     //this.currentCat = ko.observable(this.catList()[0]);
+    
+    this.getWeather = function() {
+        //$.getJSON("http://api.openweathermap.org/data/2.5/forecast?id=5393049&APPID=7eb2739c11560e56f77b4edae27e19b2",function(json){
+        //self.weather =  JSON.stringify(json);
+        self.weather = "weather created";
+    }   
+
+
     
     //this.incrementCounter = function() {
     //    this.clickCount(this.clickCount() + 1);
