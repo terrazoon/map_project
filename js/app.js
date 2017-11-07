@@ -26,11 +26,11 @@ function getWeather(latitude, longtitude) {
       APPID: API_KEY
     },
     success: data => {
-       console.log(data["main"]["temp"] + " F");
-       $('.weather_field').html(data["main"]["temp"] + " F");
+       console.log(data.main.temp + " F");
+       $('.weather_field').html(data.main.temp + " F");
           
     }
-  })
+  });
 }
 
 getWeather(34.3606,-118.5548);
@@ -57,8 +57,8 @@ var ViewModel = function() {
         //$.getJSON("http://api.openweathermap.org/data/2.5/forecast?id=5393049&APPID=7eb2739c11560e56f77b4edae27e19b2",function(json){
         //self.weather =  JSON.stringify(json);
         self.weather = "weather created";
-    }   
+    }; 
     
-}
+};
 
 ko.applyBindings(new ViewModel());
