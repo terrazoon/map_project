@@ -2,9 +2,12 @@
 var locations = [
     {title: 'Vista Valencia Golf Course', location: {lat: 34.3857, lng: -118.5642}},
     {title: 'California Institute of the Arts', location: {lat: 34.3933, lng: -118.5668}},
+    {title: 'Saugus High School', location: {lat: 34.3844, lng: -118.5189}}, 
     {title: 'Six Flags Magic Mountain', location: {lat: 34.4253, lng: -118.5972}},
     {title: 'The Masters University', location: {lat: 34.3825, lng: -118.5193}},
-    {title: 'Towsley Canyon Park', location: {lat: 34.3606, lng: -118.5548}}
+    {title: 'Towsley Canyon Park', location: {lat: 34.3606, lng: -118.5548}},
+    {title: 'Valley View Elementary School', location: {lat: 34.3974, lng: -118.4750}}
+    
 ];
 
         

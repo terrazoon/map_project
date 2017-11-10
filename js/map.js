@@ -211,6 +211,7 @@
           polygon.getPath().addListener('set_at', searchWithinPolygon);
           polygon.getPath().addListener('insert_at', searchWithinPolygon);
         });
+        showAllListings();
       }
       
 
@@ -258,9 +259,9 @@
           // Open the infowindow on the correct marker.
           infowindow.open(map, marker);
         }
+        
       }
-
-      // This function will loop through the markers array and display them all.
+      
       function showListings() {
         for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
@@ -277,6 +278,27 @@
             markers[i].setMap(map);
             bounds.extend(markers[i].position);
           }
+        }
+        map.fitBounds(bounds);
+      }
+
+      // This function will loop through the markers array and display them all.
+      function showAllListings() {
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        var e = document.getElementById("location");
+        var strUser = e.options[e.selectedIndex].value;
+        var title = locations[e.selectedIndex].title;
+        
+        
+        var bounds = new google.maps.LatLngBounds();
+        // Extend the boundaries of the map for each marker and display the marker
+        for (var i = 0; i < markers.length; i++) {
+          //if (title == markers[i].title) {
+            markers[i].setMap(map);
+            bounds.extend(markers[i].position);
+          //}
         }
         map.fitBounds(bounds);
       }
@@ -350,7 +372,7 @@
             }, function(results, status) {
               if (status == google.maps.GeocoderStatus.OK) {
                 map.setCenter(results[0].geometry.location);
-                map.setZoom(8);
+                map.setZoom(12);
               } else {
                 window.alert('We could not find that location - try entering a more' +
                     ' specific place.');
