@@ -372,7 +372,7 @@
             }, function(results, status) {
               if (status == google.maps.GeocoderStatus.OK) {
                 map.setCenter(results[0].geometry.location);
-                map.setZoom(12);
+                map.setZoom(18);
               } else {
                 window.alert('We could not find that location - try entering a more' +
                     ' specific place.');
