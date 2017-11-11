@@ -143,13 +143,14 @@
             id: i
           });
           // Push the marker to our array of markers.
+          
           markers.push(marker);
           // Create an onclick event to open the large infowindow at each marker.
           marker.addListener('click', function() {
             if (this.getAnimation() !== null) {
               this.setAnimation(null);
             } else {
-              this.setAnimation(google.maps.Animation.BOUNCE);
+              this.setAnimation(4);
             }
             populateInfoWindow(this, largeInfowindow);
           });
@@ -162,23 +163,13 @@
             this.setIcon(defaultIcon);
           });
         }
-        document.getElementById('show-listings').addEventListener('click', showListings);
 
-        document.getElementById('hide-listings').addEventListener('click', function() {
-          hideMarkers(markers);
-        });
+        
 
         document.getElementById('toggle-drawing').addEventListener('click', function() {
           toggleDrawing(drawingManager);
         });
 
-        document.getElementById('zoom-to-area').addEventListener('click', function() {
-          zoomToArea();
-        });
-
-        document.getElementById('search-within-time').addEventListener('click', function() {
-          searchWithinTime();
-        });
 
         // Listen for the event fired when the user selects a prediction from the
         // picklist and retrieve more details for that place.
@@ -597,7 +588,7 @@
             innerHTML += '<br>' + place.formatted_phone_number;
           }
           if (place.opening_hours) {
-            innerHTML += '<br><br><strong>Hors:</strong><br>' +
+            innerHTML += '<br><br><strong>Hours:</strong><br>' +
                 place.opening_hours.weekday_text[0] + '<br>' +
                 place.opening_hours.weekday_text[1] + '<br>' +
                 place.opening_hours.weekday_text[2] + '<br>' +

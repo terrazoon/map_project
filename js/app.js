@@ -55,12 +55,30 @@ var ViewModel = function() {
     
     this.durationList = ko.observableArray(["10", "15", "30", "60"]);
     this.modeList = ko.observableArray(["DRIVING", "WALKING", "BICYCLING", "TRANSIT"]);   
+    this.map = ko.observable(document.getElementById("map"));
     
     this.getWeather = function() {
         //$.getJSON("http://api.openweathermap.org/data/2.5/forecast?id=5393049&APPID=7eb2739c11560e56f77b4edae27e19b2",function(json){
         //self.weather =  JSON.stringify(json);
         self.weather = "weather created";
     }; 
+    
+    this.searchMapWithinTime = function() {
+        searchWithinTime();
+    }
+    
+    this.showMapListings = function() {
+        showListings();
+    } 
+    
+    //TODO
+    this.hideMapListings = function() {
+        hideMarkers(markers);
+    }
+    
+    this.mapZoomToArea = function() {
+        zoomToArea();
+    }
     
 };
 
