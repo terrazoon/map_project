@@ -622,4 +622,7 @@
         }
       });
     }
-
+    
+    function mapError() {
+        windows.alert("The map is not available at the moment. Please try again later.");
+    }
