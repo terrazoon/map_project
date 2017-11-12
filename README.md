@@ -1,5 +1,8 @@
 # map project
 This is application provides some fascinating details about sites in the city of Santa Clarita.
+
+# third party APIs
+This application uses openweathermap to get temperature and UV information for every location in the city.
  
 #how to use
 

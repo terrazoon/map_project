@@ -13,6 +13,24 @@
       // over the number of places that show.
       var placeMarkers = [];
       
+      //non-google third party api
+function getSpecWeather(latitude, longtitude) {
+  $.ajax({
+    url: 'http://api.openweathermap.org/data/2.5/weather',
+    data: {
+      lat: latitude,
+      lon: longtitude,
+      units: 'imperial',
+      APPID: API_KEY
+    },
+    success: data => {
+       console.log(data.main.temp + " F");
+       $('.weather_field').html(data.main.temp + " F");
+          
+    }
+  });
+}
+      
       function initMap() {
         
         
@@ -166,9 +184,7 @@
 
         
 
-        document.getElementById('toggle-drawing').addEventListener('click', function() {
-          toggleDrawing(drawingManager);
-        });
+      
 
 
         // Listen for the event fired when the user selects a prediction from the
@@ -177,9 +193,6 @@
           searchBoxPlaces(this);
         });
 
-        // Listen for the event fired when the user selects a prediction and clicks
-        // "go" more details for that place.
-        document.getElementById('go-places').addEventListener('click', textSearchPlaces);
 
         // Add an event listener so that the polygon is captured,  call the
         // searchWithinPolygon function. This will show the markers in the polygon,
@@ -214,6 +227,7 @@
         if (infowindow.marker != marker) {
           // Clear the infowindow content to give the streetview time to load.
           infowindow.setContent('');
+         
           infowindow.marker = marker;
           // Make sure the marker property is cleared if the infowindow is closed.
           infowindow.addListener('closeclick', function() {
@@ -229,7 +243,7 @@
               var nearStreetViewLocation = data.location.latLng;
               var heading = google.maps.geometry.spherical.computeHeading(
                 nearStreetViewLocation, marker.position);
-                infowindow.setContent('<div>' + marker.title + '</div><div id="pano"></div>');
+                infowindow.setContent('<div>' + marker.title + '</div><div class="weather_field"></div><div class="latlng_field"></div><div class="uv_field"></div><BR><div id="pano"></div>');
                 var panoramaOptions = {
                   position: nearStreetViewLocation,
                   pov: {
@@ -241,13 +255,15 @@
                 document.getElementById('pano'), panoramaOptions);
             } else {
               infowindow.setContent('<div>' + marker.title + '</div>' +
-                '<div>No Street View Found</div>');
+                '<BR>Current temperature:<div class="weather_field"></div><BR><div class="latlng_field"></div><div class="uv_field"></div><div>No Street View Found</div>');
             }
           }
           // Use streetview service to get the closest streetview image within
           // 50 meters of the markers position
           streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
           // Open the infowindow on the correct marker.
+           getWeather(marker.position.lat, marker.position.lng);
+         
           infowindow.open(map, marker);
         }
         
@@ -581,6 +597,7 @@
           if (place.name) {
             innerHTML += '<strong>' + place.name + '</strong>';
           }
+          
           if (place.formatted_address) {
             innerHTML += '<br>' + place.formatted_address;
           }
@@ -599,12 +616,14 @@
           }
           if (place.photos) {
             innerHTML += '<br><br><img src="' + place.photos[0].getUrl(
-                {maxHeight: 100, maxWidth: 200}) + '">';
+                {maxHeight: 300, maxWidth: 300}) + '">';
           }
           
-          innerHTML += "WEATHER=" + weather;
-          innerHTML += '</div>';
+          
+          
           infowindow.setContent(innerHTML);
+          
+          getWeather(place.geometry.location.lat, place.geometry.location.lng);
           infowindow.open(map, marker);
           // Make sure the marker property is cleared if the infowindow is closed.
           infowindow.addListener('closeclick', function() {

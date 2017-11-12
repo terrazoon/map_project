@@ -13,18 +13,15 @@
       <div class="options-box">
         <h1>Visit Santa Clarita</h1>
 
-        <BR>
-        Current weather in Santa Clarita:        
-        <div class="weather_field"></div>
+    
        
         <div>
           <select id="location" data-bind="options: availableLocations, optionsText: 'title', value: selectedLocation "></select>
-          
           <input id="show-listings" data-bind="click: showMapListings" type="button" value="Go">
           <input id="hide-listings" data-bind="click: hideMapListings" type="hidden" value="Hide Listings">
           <hr>
           <span class="text"></span>
-          <input id="toggle-drawing"  type="hidden" value="Drawing Tools">
+          <input id="toggle-drawing" data-bind="click: toggleMapDrawing" type="hidden" value="Drawing Tools">
         </div>
         <hr>
         <div>
@@ -47,7 +44,7 @@
         <div>
           <span class="text">Search for nearby places</span>
           <input id="places-search" type="text" placeholder="Ex: Pizza delivery in Santa Clarita">
-          <input id="go-places" type="button" value="Go">
+          <input id="go-places" data-bind="click: mapTextSearchPlaces" type="button" value="Go">
         </div>
       </div> <!--end optionsbox-->
       </div> <!--end col-->
