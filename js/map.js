@@ -310,7 +310,7 @@ function getUV(latitude, longitude) {
             markers[i].setMap(null);
         }
         var e = document.getElementById("location");
-        var strUser = e.options[e.selectedIndex].value;
+        //var strUser = e.options[e.selectedIndex].value;
         var title = locations[e.selectedIndex].title;
         
         
@@ -331,7 +331,7 @@ function getUV(latitude, longitude) {
             markers[i].setMap(null);
         }
         var e = document.getElementById("location");
-        var strUser = e.options[e.selectedIndex].value;
+        //var strUser = e.options[e.selectedIndex].value;
         var title = locations[e.selectedIndex].title;
         
         

@@ -67,3 +67,12 @@ html,
       #zoom-to-area-text {
         width: 70%;
       }
+
+      
+      body, a, p { font-size: .85em; }
+input { width: 100px; }
+table { border: 1px solid black; }
+h3, p, td, th { padding: 3px; }
+h3 { font-weight: bold; }
+.matched { background-color: yellow; }
+.n { text-align: right; }
