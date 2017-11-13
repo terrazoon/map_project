@@ -13,22 +13,42 @@
       // over the number of places that show.
       var placeMarkers = [];
       
-      //non-google third party api
-function getSpecWeather(latitude, longtitude) {
+      var wdata;
+      var uvdata;
+      
+      
+//non-google third party api
+function getWeather(latitude, longitude) {
   $.ajax({
     url: 'http://api.openweathermap.org/data/2.5/weather',
     data: {
       lat: latitude,
-      lon: longtitude,
+      lon: longitude,
       units: 'imperial',
       APPID: API_KEY
     },
     success: data => {
-       console.log(data.main.temp + " F");
-       $('.weather_field').html(data.main.temp + " F");
-          
+       wdata = data;
+       console.log(wdata.main.temp + " F");
     }
   });
+}
+
+function getUV(latitude, longitude) {
+  $.ajax({
+    url: 'http://api.openweathermap.org/data/2.5/uvi',
+    data: {
+      lat: latitude,
+      lon: longitude,
+      units: 'imperial',
+      APPID: API_KEY
+    },
+    success: data => {
+       console.log(data.value + " UVI");
+       uvdata = data;
+    }
+  });
+  
 }
       
       function initMap() {
@@ -218,11 +238,25 @@ function getSpecWeather(latitude, longtitude) {
         showAllListings();
       }
       
-
+      function getWeatherView(temp) {
+          return "<BR>From openweathermap.org:<BR><BR>Current temperature:" + temp + " F";
+      }
+      
+      function getUVView(data) {
+          return "<BR>Current UV Index:" + data.value.toFixed(2)
+                 
+                + "<BR>Latitude:" + data.lat.toFixed(4)
+                +"<BR>Longitude:" + data.lon.toFixed(4);
+                
+      }
+      
       // This function populates the infowindow when the marker is clicked. We'll only allow
       // one infowindow which will open at the marker that is clicked, and populate based
       // on that markers position.
       function populateInfoWindow(marker, infowindow) {
+        getWeather(marker.position.lat, marker.position.lng);
+        getUV(marker.position.lat, marker.position.lng);
+        
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
           // Clear the infowindow content to give the streetview time to load.
@@ -239,11 +273,14 @@ function getSpecWeather(latitude, longtitude) {
           // position of the streetview image, then calculate the heading, then get a
           // panorama from that and set the options
           function getStreetView(data, status) {
+              
+            //if (wdata && uvdata) then display weather info blah blah
             if (status == google.maps.StreetViewStatus.OK) {
               var nearStreetViewLocation = data.location.latLng;
               var heading = google.maps.geometry.spherical.computeHeading(
                 nearStreetViewLocation, marker.position);
-                infowindow.setContent('<div>' + marker.title + '</div><div class="weather_field"></div><div class="latlng_field"></div><div class="uv_field"></div><BR><div id="pano"></div>');
+                
+                infowindow.setContent('<div>' + marker.title + '</div>' + getWeatherView(wdata.main.temp) + getUVView(uvdata) + '<BR><div id="pano"></div>');
                 var panoramaOptions = {
                   position: nearStreetViewLocation,
                   pov: {
@@ -254,15 +291,14 @@ function getSpecWeather(latitude, longtitude) {
               var panorama = new google.maps.StreetViewPanorama(
                 document.getElementById('pano'), panoramaOptions);
             } else {
-              infowindow.setContent('<div>' + marker.title + '</div>' +
-                '<BR>Current temperature:<div class="weather_field"></div><BR><div class="latlng_field"></div><div class="uv_field"></div><div>No Street View Found</div>');
+              infowindow.setContent('<div>' + marker.title + '</div>' + getWeatherView(wdata.main.temp) + getUVView(uvdata) + '<div>No Street View Found</div>');
             }
           }
           // Use streetview service to get the closest streetview image within
           // 50 meters of the markers position
           streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
           // Open the infowindow on the correct marker.
-           getWeather(marker.position.lat, marker.position.lng);
+           
          
           infowindow.open(map, marker);
         }
@@ -634,5 +670,5 @@ function getSpecWeather(latitude, longtitude) {
     }
     
     function mapError() {
-        windows.alert("The map is not available at the moment. Please try again later.");
+        window.alert("The map is not available at the moment. Please try again later.");
     }
