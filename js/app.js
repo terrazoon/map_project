@@ -130,7 +130,7 @@ var ViewModel = function() {
   }
     
   this.showMapListings = function() {
-    showListings();
+    showListings(self.selectedLocation());
   } 
     
   this.hideMapListings = function() {

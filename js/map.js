@@ -274,14 +274,13 @@
         
       }
       
-      function showListings() {
+      function showListings(e) {
         for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
         }
-        var e = document.getElementById("location");
         
         //var e = ViewModel.selectedLocation;
-        var title = locations[e.selectedIndex].title;
+        var title = e.title;
         
         
         var bounds = new google.maps.LatLngBounds();
@@ -447,7 +446,6 @@
             origins[i] = markers[i].position;
           }
           var destination = address;
-          var mode = document.getElementById('mode').value;
           // Now that both the origins and destination are defined, get all the
           // info for the distances between them.
           distanceMatrixService.getDistanceMatrix({
