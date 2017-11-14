@@ -13,7 +13,6 @@
       // over the number of places that show.
       var placeMarkers = [];
 
-
       
       function initMap() {
         
@@ -94,6 +93,7 @@
           mapTypeControl: false
         });
 
+        
         // This autocomplete is for use in the search within time entry box.
         var timeAutocomplete = new google.maps.places.Autocomplete(
             document.getElementById('search-within-time-text'));
@@ -220,7 +220,7 @@
       function populateInfoWindow(marker, infowindow) {
         getWeather(marker.position.lat, marker.position.lng);
         getUV(marker.position.lat, marker.position.lng);
-        
+        console.log("got weather and uv");
         // Check to make sure the infowindow is not already opened on this marker.
         if (infowindow.marker != marker) {
           // Clear the infowindow content to give the streetview time to load.
@@ -270,28 +270,42 @@
            
          
           infowindow.open(map, marker);
+          console.log("window should be open now");
         }
         
       }
       
       function showListings(e) {
+        if (e==null) {
+            window.alert("You must make a selection");
+            return;
+        }
+        
         for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
         }
         
-        //var e = ViewModel.selectedLocation;
         var title = e.title;
         
-        
+        var selectedMarker;
         var bounds = new google.maps.LatLngBounds();
         // Extend the boundaries of the map for each marker and display the marker
         for (var i = 0; i < markers.length; i++) {
           if (title == markers[i].title) {
             markers[i].setMap(map);
+            selectedMarker = markers[i];
             bounds.extend(markers[i].position);
+            
           }
         }
         map.fitBounds(bounds);
+        if (selectedMarker != null) {
+            selectedMarker.setAnimation(4);
+            
+
+            var largeInfowindow = new google.maps.InfoWindow();
+            populateInfoWindow(selectedMarker, largeInfowindow);
+        }
       }
       
       function titleMatches(arr, title) {
@@ -418,7 +432,7 @@
             }, function(results, status) {
               if (status == google.maps.GeocoderStatus.OK) {
                 map.setCenter(results[0].geometry.location);
-                map.setZoom(18);
+                map.setZoom(12);
               } else {
                 window.alert('We could not find that location - try entering a more' +
                     ' specific place.');
@@ -430,7 +444,7 @@
       // This function allows the user to input a desired travel time, in
       // minutes, and a travel mode, and a location - and only show the listings
       // that are within that travel time (via that travel mode) of the location
-      function searchWithinTime(address, mode) {
+      function searchWithinTime(address, mode, maxDuration) {
         // Initialize the distance matrix service.
         var distanceMatrixService = new google.maps.DistanceMatrixService;
         // Check to make sure the place entered isn't blank.
@@ -457,7 +471,7 @@
             if (status !== google.maps.DistanceMatrixStatus.OK) {
               window.alert('Error was: ' + status);
             } else {
-              displayMarkersWithinTime(response);
+              displayMarkersWithinTime(response, maxDuration, address, mode);
             }
           });
         }
@@ -465,8 +479,7 @@
 
       // This function will go through each of the results, and,
       // if the distance is LESS than the value in the picker, show it on the map.
-      function displayMarkersWithinTime(response) {
-        var maxDuration = document.getElementById('max-duration').value;
+      function displayMarkersWithinTime(response, maxDuration, address, mode) {
         var origins = response.originAddresses;
         var destinations = response.destinationAddresses;
         // Parse through the results, and get the distance and duration of each.
@@ -495,7 +508,7 @@
                 var infowindow = new google.maps.InfoWindow({
                   content: durationText + ' away, ' + distanceText +
                     '<div><input type=\"button\" value=\"View Route\" onclick =' +
-                    '\"displayDirections(&quot;' + origins[i] + '&quot;);\"></input></div>'
+                    '\"displayDirections(&quot;' + origins[i] + '&quot;, &quot;' + address + '&quot;, &quot;' + mode + '&quot;);\"></input></div>'
                 });
                 infowindow.open(map, markers[i]);
                 // Put this in so that this small window closes if the user clicks
@@ -516,14 +529,11 @@
       // This function is in response to the user selecting "show route" on one
       // of the markers within the calculated distance. This will display the route
       // on the map.
-      function displayDirections(origin) {
+      function displayDirections(origin, address, mode) {
         hideMarkers(markers);
         var directionsService = new google.maps.DirectionsService;
         // Get the destination address from the user entered value.
-        var destinationAddress =
-            document.getElementById('search-within-time-text').value;
-        // Get mode again from the user entered value.
-        var mode = document.getElementById('mode').value;
+        var destinationAddress = addresss;
         directionsService.route({
           // The origin is the passed in marker's position.
           origin: origin,

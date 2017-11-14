@@ -66,7 +66,8 @@ function getUV(latitude, longitude) {
 
 var ViewModel = function() {
   var self = this;
-  
+
+     
   
   this.availableLocations = ko.observableArray(locations);
   
@@ -75,6 +76,8 @@ var ViewModel = function() {
   
   this.filter = ko.observable("");
   this.search = ko.observable("");
+  
+  
   
   
   this.showAllMapListings = function(filterList) {
@@ -120,13 +123,14 @@ var ViewModel = function() {
     }
   });
 
+  
     
   this.durationList = ko.observableArray(["10", "15", "30", "60"]);
   this.modeList = ko.observableArray(["DRIVING", "WALKING", "BICYCLING", "TRANSIT"]);   
-  this.map = ko.observable(document.getElementById("map"));
-    
+  this.mainMap = ko.observable();
+   
   this.searchMapWithinTime = function() {
-    searchWithinTime(self.mapSearchTimeText(), self.selectedMode());
+    searchWithinTime(self.mapSearchTimeText(), self.selectedMode(), self.maxDuration());
   }
     
   this.showMapListings = function() {
@@ -146,7 +150,9 @@ var ViewModel = function() {
   self.mapPlacesSearch = ko.observable("Ex: Pizza delivery in Santa Clarita");
   self.mapSearchTimeText = ko.observable("Ex: Valley Lyons Pet Hospital");
   self.selectedMode = ko.observable();
-    
+  self.maxDuration = ko.observable(10);
+  
+  
   this.mapTextSearchPlaces = function() {
     textSearchPlaces(self.mapPlacesSearch());
   }

@@ -16,43 +16,13 @@
     
        
         <div>
-          <select id="location" data-bind="options: availableLocations, optionsText: 'title', value: selectedLocation "></select>
-          <input id="show-listings" data-bind="click: showMapListings" type="button" value="Go">
-          <input id="hide-listings" data-bind="click: hideMapListings" type="hidden" value="Hide Listings">
+          <select style='width:300px' multiple=multiple height=5 id="location" data-bind="options: filteredLocations, optionsText: 'title', value: selectedLocation, click: showMapListings "></select>
           <hr>
           <span class="text"></span>
           <input id="toggle-drawing" data-bind="click: toggleMapDrawing" type="hidden" value="Drawing Tools">
         </div>
         <hr>
-        <table id="mytable">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Latitude</th>
-            <th>Longitude</th>
-            
-        </tr>
-    </thead>
-    <tbody data-bind="template: { name: 'itemsTmpl', foreach: filteredLocations }"></tbody>
-    <script id="itemsTmpl" type="text/html">
-        <tr data-bind="css: { matched: $data === $root.firstMatch() }">
-            <td >
-                <input class='n'  data-bind="value: title" />
-            </td>
-            
-            <td>
-                <input class="m" data-bind="value: location.lat" />
-            </td>
-            
-            <td>
-                <input class="m" data-bind="value: location.lng" />
-            </td>
-            
-            
-        </tr>
-    </script>
-    
-</table>
+        
 
 <h3>Filter display by name</h3>
 <p>Filter: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></p>
@@ -67,7 +37,7 @@
         <hr>
         <div>
           <span class="text"> Within </span>
-          <select id="max-duration" data-bind="options: durationList "></select> 
+          <select id="max-duration" data-bind="options: durationList, value: maxDuration "></select> 
           <span class="text"> minutes </span>
           <select id="mode" data-bind="options: modeList, value: selectedMode"></select> 
           
@@ -87,7 +57,7 @@
       </div>
       <div class="row">
       <div class="col-sm-12 col-md-6">
-      <div id="map"></div>
+      <div data-bind="value: mainMap" id="map"></div>
       </div>
       </div> <!-- end row -->
     </div> <!-- end container-->
