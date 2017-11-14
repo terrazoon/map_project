@@ -304,9 +304,30 @@
           }
           return false;
       }
+      
+      
+      // This function will loop through the markers array and display them all.
+      function showAllListings() {
+        
+        
+       
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+        }
+        
+        
+        var bounds = new google.maps.LatLngBounds();
+        // Extend the boundaries of the map for each marker and display the marker
+        for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+            bounds.extend(markers[i].position);
+          
+        }
+        map.fitBounds(bounds);
+      }
 
       // This function will loop through the markers array and display them all.
-      function showAllListings(arr) {
+      function showFilteredListings(arr) {
         
         
        
@@ -410,10 +431,9 @@
       // This function allows the user to input a desired travel time, in
       // minutes, and a travel mode, and a location - and only show the listings
       // that are within that travel time (via that travel mode) of the location
-      function searchWithinTime() {
+      function searchWithinTime(address, mode) {
         // Initialize the distance matrix service.
         var distanceMatrixService = new google.maps.DistanceMatrixService;
-        var address = document.getElementById('search-within-time-text').value;
         // Check to make sure the place entered isn't blank.
         if (address == '') {
           window.alert('You must enter an address.');
@@ -543,12 +563,13 @@
 
       // This function firest when the user select "go" on the places search.
       // It will do a nearby search using the entered query string or place.
-      function textSearchPlaces() {
+      function textSearchPlaces(myquery) {
+        
         var bounds = map.getBounds();
         hideMarkers(placeMarkers);
         var placesService = new google.maps.places.PlacesService(map);
         placesService.textSearch({
-          query: document.getElementById('places-search').value,
+          query: myquery,
           bounds: bounds
         }, function(results, status) {
           if (status === google.maps.places.PlacesServiceStatus.OK) {

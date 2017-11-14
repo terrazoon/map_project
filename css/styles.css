@@ -75,4 +75,5 @@ table { border: 1px solid black; }
 h3, p, td, th { padding: 3px; }
 h3 { font-weight: bold; }
 .matched { background-color: yellow; }
-.n { text-align: right; }
+.n { text-align: left; width: 300px; }
+.m { text-align: right; width: 75px; }

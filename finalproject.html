@@ -30,27 +30,31 @@
             <th>Name</th>
             <th>Latitude</th>
             <th>Longitude</th>
-            <th></th>
+            
         </tr>
     </thead>
     <tbody data-bind="template: { name: 'itemsTmpl', foreach: filteredLocations }"></tbody>
     <script id="itemsTmpl" type="text/html">
         <tr data-bind="css: { matched: $data === $root.firstMatch() }">
-            <td>
-                <input data-bind="value: title" />
+            <td >
+                <input class='n'  data-bind="value: title" />
             </td>
             
             <td>
-                <input class="n" data-bind="value: location.lat" />
+                <input class="m" data-bind="value: location.lat" />
             </td>
-            <td class="n" data-bind="text: location.lng">
+            
+            <td>
+                <input class="m" data-bind="value: location.lng" />
             </td>
+            
+            
         </tr>
     </script>
     
 </table>
 
-<h3>5- Filter display by name</h3>
+<h3>Filter display by name</h3>
 <p>Filter: <input data-bind="value: filter, valueUpdate: 'afterkeydown'" /></p>
 
         
@@ -65,17 +69,17 @@
           <span class="text"> Within </span>
           <select id="max-duration" data-bind="options: durationList "></select> 
           <span class="text"> minutes </span>
-          <select id="mode" data-bind="options: modeList "></select> 
+          <select id="mode" data-bind="options: modeList, value: selectedMode"></select> 
           
           
           <span class="text">of</span>
-          <input id="search-within-time-text" type="text" placeholder="Ex: Valley Lyons Pet Hospital">
+          <input id="search-within-time-text" type="text" data-bind="value: mapSearchTimeText">
           <input id="search-within-time" data-bind="click: searchMapWithinTime" type="button" value="Go">
         </div>
         <hr>
         <div>
           <span class="text">Search for nearby places</span>
-          <input id="places-search" type="text" placeholder="Ex: Pizza delivery in Santa Clarita">
+          <input id="places-search" type="text" data-bind="value: mapPlacesSearch">
           <input id="go-places" data-bind="click: mapTextSearchPlaces" type="button" value="Go">
         </div>
       </div> <!--end optionsbox-->

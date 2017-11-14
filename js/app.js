@@ -62,6 +62,8 @@ function getUV(latitude, longitude) {
 }
 
 
+
+
 var ViewModel = function() {
   var self = this;
   
@@ -76,7 +78,7 @@ var ViewModel = function() {
   
   
   this.showAllMapListings = function(filterList) {
-      showAllListings(filterList);
+      showFilteredListings(filterList);
   }
   
   //ko.utils.arrayFilter - filter the items using the filter text
@@ -90,6 +92,7 @@ var ViewModel = function() {
             return self.stringStartsWith(item.title.toLowerCase(), filter);
         });
     }
+ 
      
     if (typeof showAllListings === "function") {     
       self.showAllMapListings(returnVal);
@@ -115,7 +118,7 @@ var ViewModel = function() {
             return ko.utils.stringStartsWith(item.total().toLowerCase(), search);
         });
     }
-});
+  });
 
     
   this.durationList = ko.observableArray(["10", "15", "30", "60"]);
@@ -123,7 +126,7 @@ var ViewModel = function() {
   this.map = ko.observable(document.getElementById("map"));
     
   this.searchMapWithinTime = function() {
-    searchWithinTime();
+    searchWithinTime(self.mapSearchTimeText(), self.selectedMode());
   }
     
   this.showMapListings = function() {
@@ -140,9 +143,12 @@ var ViewModel = function() {
   }
   
   self.mapZoomToAreaText = ko.observable("Enter your favorite area!");
+  self.mapPlacesSearch = ko.observable("Ex: Pizza delivery in Santa Clarita");
+  self.mapSearchTimeText = ko.observable("Ex: Valley Lyons Pet Hospital");
+  self.selectedMode = ko.observable();
     
   this.mapTextSearchPlaces = function() {
-    textSearchPlaces();
+    textSearchPlaces(self.mapPlacesSearch());
   }
     
   this.toggleMapDrawing = function() {
