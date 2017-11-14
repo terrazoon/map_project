@@ -12,44 +12,8 @@
       // Create placemarkers array to use in multiple functions to have control
       // over the number of places that show.
       var placeMarkers = [];
-      
-      var wdata;
-      var uvdata;
-      
-      
-//non-google third party api
-function getWeather(latitude, longitude) {
-  $.ajax({
-    url: 'http://api.openweathermap.org/data/2.5/weather',
-    data: {
-      lat: latitude,
-      lon: longitude,
-      units: 'imperial',
-      APPID: API_KEY
-    },
-    success: data => {
-       wdata = data;
-       console.log(wdata.main.temp + " F");
-    }
-  });
-}
 
-function getUV(latitude, longitude) {
-  $.ajax({
-    url: 'http://api.openweathermap.org/data/2.5/uvi',
-    data: {
-      lat: latitude,
-      lon: longitude,
-      units: 'imperial',
-      APPID: API_KEY
-    },
-    success: data => {
-       console.log(data.value + " UVI");
-       uvdata = data;
-    }
-  });
-  
-}
+
       
       function initMap() {
         
@@ -280,7 +244,12 @@ function getUV(latitude, longitude) {
               var heading = google.maps.geometry.spherical.computeHeading(
                 nearStreetViewLocation, marker.position);
                 
-                infowindow.setContent('<div>' + marker.title + '</div>' + getWeatherView(wdata.main.temp) + getUVView(uvdata) + '<BR><div id="pano"></div>');
+                if (wdata && uvdata) {
+                    infowindow.setContent('<div>' + marker.title + '</div>' + getWeatherView(wdata.main.temp) + getUVView(uvdata) + '<BR><div id="pano"></div>');
+                } else {
+                    infowindow.setContent('Weather and UV not available yet ' + '<BR><div id="pano"></div>');
+                    
+                }
                 var panoramaOptions = {
                   position: nearStreetViewLocation,
                   pov: {
@@ -310,7 +279,8 @@ function getUV(latitude, longitude) {
             markers[i].setMap(null);
         }
         var e = document.getElementById("location");
-        //var strUser = e.options[e.selectedIndex].value;
+        
+        //var e = ViewModel.selectedLocation;
         var title = locations[e.selectedIndex].title;
         
         
@@ -324,24 +294,38 @@ function getUV(latitude, longitude) {
         }
         map.fitBounds(bounds);
       }
+      
+      function titleMatches(arr, title) {
+          for (var i = 0; i < arr.length; i++) {
+              
+              if (arr[i].title == title) {
+                  return true;
+              }
+          }
+          return false;
+      }
 
       // This function will loop through the markers array and display them all.
-      function showAllListings() {
+      function showAllListings(arr) {
+        
+        
+       
         for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
         }
-        var e = document.getElementById("location");
-        //var strUser = e.options[e.selectedIndex].value;
-        var title = locations[e.selectedIndex].title;
         
+        if (arr == null) {
+            console.log("no listings to show");
+            return;
+        }
         
         var bounds = new google.maps.LatLngBounds();
         // Extend the boundaries of the map for each marker and display the marker
         for (var i = 0; i < markers.length; i++) {
-          //if (title == markers[i].title) {
+          if (titleMatches(arr, markers[i].title)) {
             markers[i].setMap(map);
             bounds.extend(markers[i].position);
-          //}
+          }
         }
         map.fitBounds(bounds);
       }
@@ -398,11 +382,10 @@ function getUV(latitude, longitude) {
       // This function takes the input value in the find nearby area text input
       // locates it, and then zooms into that area. This is so that the user can
       // show all listings, then decide to focus on one area of the map.
-      function zoomToArea() {
+      function zoomToArea(address) {
         // Initialize the geocoder.
         var geocoder = new google.maps.Geocoder();
-        // Get the address or place that the user entered.
-        var address = document.getElementById('zoom-to-area-text').value;
+        
         // Make sure the address isn't blank.
         if (address == '') {
           window.alert('You must enter an area, or address.');

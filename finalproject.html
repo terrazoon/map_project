@@ -57,7 +57,7 @@
         
         <hr>
         <div>
-          <input id="zoom-to-area-text" type="text" placeholder="Enter your favorite area!">
+          <input id="zoom-to-area-text" data-bind="value: mapZoomToAreaText" type="text">
           <input id="zoom-to-area" data-bind="click: mapZoomToArea" type="button" value="Zoom">
         </div>
         <hr>
@@ -93,9 +93,10 @@
     <script src="js/lib/knockout-3.4.2.js"></script>
     <script src="js/lib/jquery-3.2.1.min.js"></script>
     <script src="js/lib/bootstrap.min.js"></script>
-    <script src="js/map.js"></script>
     
     <script src="js/app.js"></script>
+    <script src="js/map.js"></script>
+    
    
     <script async defer onerror="mapError()"
         src=

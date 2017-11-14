@@ -14,6 +14,52 @@ var Location = function(title, location) {
 
 let API_KEY = '7eb2739c11560e56f77b4edae27e19b2';
 
+      
+      var wdata;
+      var uvdata;
+      
+      
+
+//non-google third party api
+function getWeather(latitude, longitude) {
+  $.ajax({
+    url: 'http://api.openweathermap.org/data/2.5/weather',
+    data: {
+      lat: latitude,
+      lon: longitude,
+      units: 'imperial',
+      APPID: API_KEY
+    },
+    success: data => {
+       wdata = data;
+       console.log(wdata.main.temp + " F");
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+        window.alert("The weather info is not available.  Error" + xhr.status);
+    }
+  });
+}
+
+function getUV(latitude, longitude) {
+  $.ajax({
+    url: 'http://api.openweathermap.org/data/2.5/uvi',
+    data: {
+      lat: latitude,
+      lon: longitude,
+      units: 'imperial',
+      APPID: API_KEY
+    },
+    success: data => {
+       console.log(data.value + " UVI");
+       uvdata = data;
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+        window.alert("The UV info is not available.  Error" + xhr.status);
+    
+    }
+  });
+  
+}
 
 
 var ViewModel = function() {
@@ -23,23 +69,32 @@ var ViewModel = function() {
   this.availableLocations = ko.observableArray(locations);
   
   
-  this.selectedLocation = ko.observable();
+  this.selectedLocation = ko.observable(locations[2]);
   
   this.filter = ko.observable("");
   this.search = ko.observable("");
   
   
+  this.showAllMapListings = function(filterList) {
+      showAllListings(filterList);
+  }
   
   //ko.utils.arrayFilter - filter the items using the filter text
   this.filteredLocations = ko.dependentObservable(function() {
     var filter = self.filter().toLowerCase();
+    var returnVal;
     if (!filter) {
-        return self.availableLocations();
+        returnVal = self.availableLocations();
     } else {
-        return ko.utils.arrayFilter(self.availableLocations(), function(item) {
+        returnVal =  ko.utils.arrayFilter(self.availableLocations(), function(item) {
             return self.stringStartsWith(item.title.toLowerCase(), filter);
         });
     }
+     
+    if (typeof showAllListings === "function") {     
+      self.showAllMapListings(returnVal);
+    }
+    return returnVal;
   });
   
   this.stringStartsWith = function (string, startsWith) {          
@@ -78,10 +133,13 @@ var ViewModel = function() {
   this.hideMapListings = function() {
     hideMarkers(markers);
   }
+  
     
   this.mapZoomToArea = function() {
-    zoomToArea();
+    zoomToArea(self.mapZoomToAreaText());
   }
+  
+  self.mapZoomToAreaText = ko.observable("Enter your favorite area!");
     
   this.mapTextSearchPlaces = function() {
     textSearchPlaces();
