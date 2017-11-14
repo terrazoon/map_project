@@ -82,7 +82,7 @@ var ViewModel = function() {
   
   this.showAllMapListings = function(filterList) {
       showFilteredListings(filterList);
-  }
+  };
   
   //ko.utils.arrayFilter - filter the items using the filter text
   this.filteredLocations = ko.dependentObservable(function() {
@@ -131,20 +131,20 @@ var ViewModel = function() {
    
   this.searchMapWithinTime = function() {
     searchWithinTime(self.mapSearchTimeText(), self.selectedMode(), self.maxDuration());
-  }
+  };
     
   this.showMapListings = function() {
     showListings(self.selectedLocation());
-  } 
+  }; 
     
   this.hideMapListings = function() {
     hideMarkers(markers);
-  }
+  };
   
     
   this.mapZoomToArea = function() {
     zoomToArea(self.mapZoomToAreaText());
-  }
+  };
   
   self.mapZoomToAreaText = ko.observable("Enter your favorite area!");
   self.mapPlacesSearch = ko.observable("Ex: Pizza delivery in Santa Clarita");
@@ -155,11 +155,11 @@ var ViewModel = function() {
   
   this.mapTextSearchPlaces = function() {
     textSearchPlaces(self.mapPlacesSearch());
-  }
+  };
     
   this.toggleMapDrawing = function() {
     toggleDrawing(drawingManager);
-  }
+  };
     
 };
 
